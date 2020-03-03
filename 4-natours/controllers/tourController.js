@@ -36,18 +36,26 @@ exports.getAllTours = async (req, res) => {
     //   .equals('easy');'
 
     //Build query
-    // 1) Filtering
+    // 1A) Filtering
     const queryObj = { ...req.query };
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach(el => delete queryObj[el]);
 
-    //2) Advance filtering
+    //1B) Advance filtering
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|le)\b/g, match => `$${match}`);
 
-    const query = Tour.find(JSON.parse(queryStr));
+    let query = Tour.find(JSON.parse(queryStr));
 
-    console.log(req.query);
+    //2) Sorting
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ');
+      query = query.sort(sortBy);
+      // Mongoose reference: sort('price rating')
+    } else {
+      query = query.sort('-createdAt');
+    }
+
     // { difficulty: 'easy', duration: {$gte: 5}}
     //Execute query
     const tours = await query;
