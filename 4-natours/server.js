@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './.env' });
 const app = require('./app');
 
-// console.log(process.env);
+//Set Database
 let DB = '';
 if (process.argv[2] === '--local') {
   DB = process.env.DATABASE_LOCAL;
@@ -14,6 +14,7 @@ if (process.argv[2] === '--local') {
   );
 }
 
+//Connect to Database
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
@@ -28,6 +29,7 @@ mongoose
     console.log('DB connection failed');
   });
 
+//Start server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`App running on ${port}...`);

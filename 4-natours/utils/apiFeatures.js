@@ -24,7 +24,6 @@ class APIFeatures {
     if (this.queryString.sort) {
       const sortBy = this.queryString.sort.split(',').join(' ');
       this.query = this.query.sort(sortBy);
-      // Mongoose reference: sort('price rating')
     } else {
       this.query = this.query.sort('-createdAt');
     }
@@ -44,7 +43,7 @@ class APIFeatures {
   }
 
   paginate() {
-    const page = this.queryString.page * 1 || 1; // || is used for defining a default value
+    const page = this.queryString.page * 1 || 1;
     const limit = this.queryString.limit * 1 || 100;
     const skip = (page - 1) * limit;
 
