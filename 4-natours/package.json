@@ -5,8 +5,11 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon server.js",
+    "start-local": "SET NODE_ENV=development& nodemon server.js --local",
     "start:prod": "SET NODE_ENV=production& nodemon server.js",
-    "debug": "ndb server.js"
+    "start:prod-local": "SET NODE_ENV=production& nodemon server.js --local",
+    "debug": "ndb server.js",
+    "debug-local": "ndb server.js --local"
   },
   "author": "Yordi Ogando",
   "license": "ISC",
