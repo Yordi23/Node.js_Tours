@@ -5,14 +5,20 @@
   "main": "app.js",
   "scripts": {
     "start": "nodemon server.js",
-    "start:prod": "SET NODE_ENV=production& nodemon server.js"
+    "start-local": "SET NODE_ENV=development& nodemon server.js --local",
+    "start:prod": "SET NODE_ENV=production& nodemon server.js",
+    "start:prod-local": "SET NODE_ENV=production& nodemon server.js --local",
+    "debug": "ndb server.js",
+    "debug-local": "ndb server.js --local"
   },
   "author": "Yordi Ogando",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongoose": "^5.5.2"
+    "mongoose": "^5.5.2",
+    "slugify": "^1.4.0",
+    "validator": "^12.2.0"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
