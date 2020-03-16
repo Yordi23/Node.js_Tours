@@ -8,7 +8,7 @@ exports.getAllUsers = (req, res) => {
 exports.getUser = (req, res) => {
   res.status(500).json({
     status: 'error',
-    message: 'This route is not yet implementes'
+    message: 'This route is not yet implemented'
   });
 };
 
