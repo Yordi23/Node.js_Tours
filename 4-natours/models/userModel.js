@@ -4,7 +4,7 @@ const validator = require('validator');
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'Please provide your name.']
+    required: [true, 'Please provide your name']
   },
   photo: String,
   email: {
