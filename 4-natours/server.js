@@ -1,5 +1,13 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+
+//This event is triggered when there is an Unhandled Exception
+process.on('uncaughtException', err => {
+  console.log('Unhandled Exception. Shutting dow...');
+  console.log(err.name, err.message);
+  process.exit(1);
+});
+
 dotenv.config({ path: './.env' });
 const app = require('./app');
 
@@ -35,9 +43,9 @@ const server = app.listen(port, () => {
   console.log(`App running on ${port}...`);
 });
 
-//This event triggers when there is a rejected promise
+//This event is triggered when there is a rejected promise
 process.on('unhandledRejection', err => {
+  console.log('Unhandled Rejection. Shutting dow...');
   console.log(err.name, err.message);
-  console.log('Unhandled Exception. Shutting dow...');
   server.close(() => process.exit(1));
 });
