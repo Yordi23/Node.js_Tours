@@ -23,14 +23,21 @@ mongoose
   })
   .then(() => {
     console.log('DB connection succesful');
-  })
-  .catch(err => {
-    console.log(err);
-    console.log('DB connection failed');
   });
+// .catch(err => {
+//   console.log(err);
+//   console.log('DB connection failed');
+// });
 
 //Start server
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`App running on ${port}...`);
+});
+
+//This event triggers when there is a rejected promise
+process.on('unhandledRejection', err => {
+  console.log(err.name, err.message);
+  console.log('Unhandled Exception. Shutting dow...');
+  server.close(() => process.exit(1));
 });
