@@ -18,7 +18,8 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, 'Please provide a password.'],
-    minlength: [8, 'Password must have min 8 characters']
+    minlength: [8, 'Password must have min 8 characters'],
+    select: false
   },
   passwordConfirm: {
     type: String,
@@ -44,6 +45,17 @@ userSchema.pre('save', async function(next) {
   this.passwordConfirm = undefined;
   next();
 });
+
+// Instance method - Is function that will be avaliable in all the objects
+// of the collection
+userSchema.methods.correctPassword = async function(
+  candidatePassword,
+  userPassword
+) {
+  // In normal circunstances we would use this.password instead of passing the password (userPassword)
+  // throught parameters. But we cannot, because we the the password's 'select' propertie to false.
+  return await bcrypt.compare(candidatePassword, userPassword);
+};
 
 const User = mongoose.model('User', userSchema);
 
