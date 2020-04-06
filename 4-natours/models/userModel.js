@@ -8,6 +8,11 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Please provide your name']
   },
   photo: String,
+  role: {
+    type: String,
+    enum: ['user','guide','lead_guide','admin'],
+    default: 'user'
+  },
   email: {
     type: String,
     required: [true, 'Please provide your email.'],
@@ -31,7 +36,8 @@ const userSchema = new mongoose.Schema({
       },
       message: 'Passwords does not match'
     }
-  }
+  },
+  passwordChangedAt: Date
 });
 
 userSchema.pre('save', async function(next) {
@@ -46,8 +52,7 @@ userSchema.pre('save', async function(next) {
   next();
 });
 
-// Instance method - Is function that will be avaliable in all the objects
-// of the collection
+// Instance method - This kind of functions will be avaliable in all the objects of the collection
 userSchema.methods.correctPassword = async function(
   candidatePassword,
   userPassword
@@ -56,6 +61,16 @@ userSchema.methods.correctPassword = async function(
   // throught parameters. But we cannot, because we the the password's 'select' propertie to false.
   return await bcrypt.compare(candidatePassword, userPassword);
 };
+
+userSchema.methods.changedPasswordAfter = function(JWTTimestamp){
+  if(this.passwordChangedAt){
+    const changedTimestamp = parseInt(this.passwordChangedAt.getTime()/1000,10)
+    return JWTTimestamp < changedTimestamp
+  }
+  
+  // False means NOT changed
+  return false;
+}
 
 const User = mongoose.model('User', userSchema);
 
