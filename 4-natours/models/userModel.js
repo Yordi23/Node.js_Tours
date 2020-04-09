@@ -55,6 +55,15 @@ userSchema.pre('save', async function(next) {
   next();
 });
 
+userSchema.pre('save', function(next) {
+  if (!this.isModified('password') || this.isNew) return next();
+
+  // Substracting 1 second will ensure that the token be created after
+  // the password has been changed
+  this.passwordChangedAt = Date.now() - 1000;
+  next();
+});
+
 // Instance method - This kind of functions will be avaliable in all the objects of the collection
 userSchema.methods.correctPassword = async function(
   candidatePassword,
