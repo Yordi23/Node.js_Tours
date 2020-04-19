@@ -76,7 +76,34 @@ const tourSchema = new mongoose.Schema(
     secretTour: {
       type: Boolean,
       default: false
-    }
+    },
+    startLocation: {
+      // GeoJSON to specify GeoSpatial data. In mongo DB to specify this type of object, we
+      //need to specify at least to fields: type (which has to be type string and the values Point
+      //or any other supported shapes) and coordinates which is an array of numbers.
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point']
+      },
+      coordinates: [Number],
+      address: String,
+      description: String
+    },
+    //Emmbeded documents needs to be specified as an array
+    locations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point']
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number
+      }
+    ]
   },
   {
     toJSON: { virtuals: true },
