@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+const User = require('./userModel');
 
 const tourSchema = new mongoose.Schema(
   {
@@ -103,6 +104,16 @@ const tourSchema = new mongoose.Schema(
         description: String,
         day: Number
       }
+    ],
+    //This is how embed would work
+    //guides: Array
+
+    //Referencing the guides
+    guides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+      }
     ]
   },
   {
@@ -120,6 +131,18 @@ tourSchema.pre('save', function(next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
+
+///Get all the guides based on their IDs(This is the way we would embed our
+//guides with the tours but we would have to update tem every time the users
+//info gets updated)
+/*
+tourSchema.pre('save', async function(next) {
+  const guidesPromises = this.guides.map(async id => await User.findById(id));
+  this.guides = await Promise.all(guidesPromises);
+
+  next();
+});
+*/
 
 // tourSchema.pre('save', function(next) {
 //   console.log('Will save document...');
