@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+const User = require('./userModel');
 
 const tourSchema = new mongoose.Schema(
   {
@@ -76,8 +77,47 @@ const tourSchema = new mongoose.Schema(
     secretTour: {
       type: Boolean,
       default: false
-    }
+    },
+    startLocation: {
+      // GeoJSON to specify GeoSpatial data. In mongo DB to specify this type of object, we
+      //need to specify at least to fields: type (which has to be type string and the values Point
+      //or any other supported shapes) and coordinates which is an array of numbers.
+      type: {
+        type: String,
+        default: 'Point',
+        enum: ['Point']
+      },
+      coordinates: [Number],
+      address: String,
+      description: String
+    },
+    //Emmbeded documents needs to be specified as an array
+    locations: [
+      {
+        type: {
+          type: String,
+          default: 'Point',
+          enum: ['Point']
+        },
+        coordinates: [Number],
+        address: String,
+        description: String,
+        day: Number
+      }
+    ],
+    //This is how embed would work
+    //guides: Array
+
+    //Referencing the guides
+    guides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User'
+      }
+    ]
   },
+  //This will ensure that when we have a virtual propertie (a calculated field that is not stored is
+  //the DB) this showup when there is an output
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
@@ -93,6 +133,18 @@ tourSchema.pre('save', function(next) {
   this.slug = slugify(this.name, { lower: true });
   next();
 });
+
+///Get all the guides based on their IDs(This is the way we would embed our
+//guides with the tours but we would have to update tem every time the users
+//info gets updated)
+/*
+tourSchema.pre('save', async function(next) {
+  const guidesPromises = this.guides.map(async id => await User.findById(id));
+  this.guides = await Promise.all(guidesPromises);
+
+  next();
+});
+*/
 
 // tourSchema.pre('save', function(next) {
 //   console.log('Will save document...');
@@ -115,6 +167,17 @@ that start with the "find" string like "findOne" for example*/
 tourSchema.pre(/^find/, function(next) {
   this.find({ secretTour: { $ne: true } });
   this.start = Date.now();
+  next();
+});
+
+// This query middleware will populate all the guides corresponding to the tours
+//in each query
+tourSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangedAt'
+  });
+
   next();
 });
 
