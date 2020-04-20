@@ -116,6 +116,8 @@ const tourSchema = new mongoose.Schema(
       }
     ]
   },
+  //This will ensure that when we have a virtual propertie (a calculated field that is not stored is
+  //the DB) this showup when there is an output
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true }
