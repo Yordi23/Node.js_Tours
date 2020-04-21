@@ -34,13 +34,10 @@ exports.getAllTours = catchAsync(async (req, res, next) => {
 });
 
 exports.getTour = catchAsync(async (req, res, next) => {
-  //Populate is for retrieving the referenced data in an specific field
-  const tour = await Tour.findById(
-    req.params.id
-  ); /*.populate({
-    path: 'guides',
-    select: '-__v -passwordChangedAt'
-  });*/
+  //Populate is for retrieving the referenced data in an specific field.
+  //We only want to populate the reviews for the getTour endpoint (not getAll),
+  //thats why we dont use a query middleware for that
+  const tour = await Tour.findById(req.params.id).populate('reviews');
 
   if (!tour) {
     return next(new AppError('No tour found with that ID.', 404));
