@@ -35,20 +35,20 @@ const reviewSchema = new mongoose.Schema(
 );
 
 //Query Middlewares
-/*
-tourSchema.pre(/^find/, function(next) {
+
+reviewSchema.pre(/^find/, function(next) {
   this.populate({
-    path: 'user',
-    select: '-__v -passwordChangedAt'
+    path: 'tour',
+    select: 'name'
   });
 
   this.populate({
-    path: 'tour'
-    //select: '-__v -passwordChangedAt'
+    path: 'user',
+    select: 'name photo'
   });
 
   next();
-});*/
+});
 
 const Review = mongoose.model('Review', reviewSchema);
 
