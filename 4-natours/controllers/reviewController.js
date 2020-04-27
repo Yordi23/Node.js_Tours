@@ -14,6 +14,10 @@ exports.getAllReviews = catchAsync(async (req, res, next) => {
 });
 
 exports.createReview = catchAsync(async (req, res, next) => {
+  //Allow nested routes
+  if (!req.body.tour) req.body.tour = req.params.tourId;
+  if (!req.body.user) req.body.user = req.user.id; //We get req.user from the protect middleware
+
   //If there are fields in the req.body that are not in the Review Schema
   //they will simply be ignored. Thats why we can create documents like this
   const newReview = await Review.create(req.body);
