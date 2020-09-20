@@ -3,7 +3,6 @@ const AppError = require('./../utils/appError');
 const catchAsync = require('./../utils/catchAsync');
 const factory = require('./handlerFactory');
 
-//                      This will create an array containing all the arguments
 const filterObj = (obj, ...allowedFields) => {
   const newObjt = {};
   Object.keys(obj).forEach(el => {
@@ -12,18 +11,6 @@ const filterObj = (obj, ...allowedFields) => {
 
   return newObjt;
 };
-
-// exports.getAllUsers = catchAsync(async (req, res, next) => {
-//   const users = await User.find();
-
-//   res.status(500).json({
-//     status: 'success',
-//     results: users.length,
-//     data: {
-//       users
-//     }
-//   });
-// });
 
 exports.getAllUsers = factory.getAll(User);
 
@@ -71,13 +58,6 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
-// exports.getUser = (req, res) => {
-//   res.status(500).json({
-//     status: 'error',
-//     message: 'This route is not yet implemented'
-//   });
-// };
-
 exports.getUser = factory.getOne(User);
 
 exports.createUser = (req, res) => {
@@ -87,6 +67,5 @@ exports.createUser = (req, res) => {
   });
 };
 
-//Do not update password using this endpoint
 exports.updateUser = factory.updateOne(User);
 exports.deleteUser = factory.deleteOne(User);

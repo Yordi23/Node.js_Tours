@@ -10,7 +10,6 @@ const tourSchema = new mongoose.Schema(
       trim: true,
       maxlength: [40, 'A tour name must have less or equal than 40 characters'],
       minlength: [10, 'A tour name must have more or equal than 10 characters']
-      //validate: [validator.isAlpha, 'Tour name must only contain characters']
     },
     slug: String,
     duration: {
@@ -104,10 +103,6 @@ const tourSchema = new mongoose.Schema(
         day: Number
       }
     ],
-    //This is how embed would work
-    //guides: Array
-
-    //Referencing the guides
     guides: [
       {
         type: mongoose.Schema.ObjectId,
@@ -141,29 +136,6 @@ tourSchema.pre('save', function(next) {
   next();
 });
 
-///Get all the guides based on their IDs(This is the way we would embed our
-//guides with the tours but we would have to update tem every time the users
-//info gets updated)
-/*
-tourSchema.pre('save', async function(next) {
-  const guidesPromises = this.guides.map(async id => await User.findById(id));
-  this.guides = await Promise.all(guidesPromises);
-
-  next();
-});
-*/
-
-// tourSchema.pre('save', function(next) {
-//   console.log('Will save document...');
-//   next();
-// });
-
-// //Document Middleware: runs after .save() and .create()
-// tourSchema.post('save', function(doc, next) {
-//   console.log(doc);
-//   next();
-// });
-
 //Query Middleware
 
 /*This middlware works only for the "find" method.
@@ -196,7 +168,6 @@ tourSchema.post(/^find/, function(docs, next) {
 //Aggregation Middleware
 tourSchema.pre('aggregate', function(next) {
   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  //console.log(this.pipeline());
   next();
 });
 

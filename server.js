@@ -32,10 +32,6 @@ mongoose
   .then(() => {
     console.log('DB connection succesful');
   });
-// .catch(err => {
-//   console.log(err);
-//   console.log('DB connection failed');
-// });
 
 //Start server
 const port = process.env.PORT || 3000;

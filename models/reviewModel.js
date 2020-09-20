@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const User = require('./userModel');
-const Tour = require('./tourModel');
 
 const reviewSchema = new mongoose.Schema(
   {
@@ -38,14 +36,6 @@ const reviewSchema = new mongoose.Schema(
 
 //This function populates users and tours for the reviews.
 reviewSchema.pre(/^find/, function(next) {
-  /*this.populate({
-    path: 'tour',
-    select: 'name'
-  }).populate({
-    path: 'user',
-    select: 'name photo '
-  });*/
-
   this.populate({
     path: 'user',
     select: 'name photo '

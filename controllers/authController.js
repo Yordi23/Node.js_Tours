@@ -25,10 +25,8 @@ const createSendToken = (user, statusCode, res) => {
 
   if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
 
-  //The browser willl receive the cookie, save it and send it back automatically in every request
   res.cookie('jwt', token, cookieOptions);
 
-  //Remove the password from the output
   user.password = undefined;
 
   res.status(statusCode).json({
@@ -64,9 +62,7 @@ exports.login = catchAsync(async (req, res, next) => {
 
   // 2) Check if user exist & password is correct
 
-  // We write '+password' because in the model we set that field 'select' propertie to false.
-  // But now, we need that field to validate the user.
-  const user = await User.findOne({ email }).select('+password'); // Equivalent to {email:email}
+  const user = await User.findOne({ email }).select('+password');
 
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect email or password', 401));
@@ -112,7 +108,7 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = currentUser;
   next();
 });
-//                This wil create an array of all the parameters
+
 exports.restricTo = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
@@ -217,8 +213,6 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   user.passwordConfirm = newPasswordConfirm;
 
   await user.save();
-  // user.findByIdAndUpdate() will not work. It wont run the password validator
-  // nor the user's password related middlewares.
 
   // 4) Log user in
   createSendToken(user, 200, res);

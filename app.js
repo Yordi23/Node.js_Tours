@@ -76,10 +76,6 @@ app.use('/api/v1/reviews', reviewRouter);
 //If the request is not catched in any of the previous handlers, we handle
 //the error by sending the following response. This works for any http methods.
 app.all('*', (req, res, next) => {
-  // const err = new Error(`Can't find ${req.originalUrl} on this server.`);
-  // err.status = 'fail';
-  // err.statusCode = 404;
-
   //Express will asumme that anything we pass as parameter into next() function
   //is an error
   next(new AppError(`Can't find ${req.originalUrl} on this server.`, 404));

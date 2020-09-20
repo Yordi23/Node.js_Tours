@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
     validate: {
       //This only works on Create() and Save()
       validator: function(el) {
-        return el == this.password;
+        return el === this.password;
       },
       message: 'Passwords does not match'
     }
@@ -49,14 +49,11 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre('save', async function(next) {
-  //Only run this function if password was actually modified
   if (!this.isModified('password')) return next();
 
-  //HAsh the password with cost of 12
   this.password = await bcrypt.hash(this.password, 12);
-
-  //Delete passwordConfirm field
   this.passwordConfirm = undefined;
+
   next();
 });
 
@@ -81,8 +78,6 @@ userSchema.methods.correctPassword = async function(
   candidatePassword,
   userPassword
 ) {
-  // In normal circunstances we would use this.password instead of passing the password (userPassword)
-  // throught parameters. But we cannot, because we the the password's 'select' propertie to false.
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
@@ -95,7 +90,6 @@ userSchema.methods.changedPasswordAfter = function(JWTTimestamp) {
     return JWTTimestamp < changedTimestamp;
   }
 
-  // False means NOT changed
   return false;
 };
 
@@ -107,7 +101,6 @@ userSchema.methods.createPasswordResetToken = function() {
     .update(resetToken)
     .digest('hex');
 
-  console.log({ resetToken }, this.passwordResetToken);
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000; //Adding 10 more minutos (in miliseconds)
 
   return resetToken;
