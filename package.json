@@ -9,6 +9,7 @@
     "start:prod": "SET NODE_ENV=production& nodemon server.js",
     "start:prod-local": "SET NODE_ENV=production& nodemon server.js --local",
     "debug": "ndb server.js",
+    "debug:prod": "SET NODE_ENV=production& ndb server.js",
     "debug-local": "ndb server.js --local"
   },
   "author": "Yordi Ogando",
