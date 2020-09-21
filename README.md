@@ -19,7 +19,7 @@ To start the server locally, follow these steps:
 The server will be running by default on `127.0.0.1:3000` 
 
 ## Project on Heroku
-The project is also hosted on Heroku, using the following URL you can send requests to it:  `https://node-tours.herokuapp.com/`
+The project is also hosted on Heroku, using the following URL you can send requests to it:  [`https://node-tours.herokuapp.com/`](https://node-tours.herokuapp.com/)
 
 Please note that it may be possible that once you send the first request, the server may be inactive (due to Heroku free plan limitations), so you'll have to wait a few seconds for it to successfully start.
 
