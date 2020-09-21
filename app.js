@@ -67,7 +67,7 @@ app.use((req, res, next) => {
 
 //ROUTES
 
-app.use('/', (req, res, next) => {
+app.get('/', (req, res, next) => {
   res.status(200).json({
     status: 'success',
     message: 'Node.js Tours'
